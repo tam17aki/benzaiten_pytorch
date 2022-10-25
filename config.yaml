@@ -1,0 +1,97 @@
+# -*- coding: utf-8 -*-
+# Configuration for Benzaiten Starter Kit ver. 1.0
+
+# Copyright (C) 2022 by Akira TAMAMORI
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+benzaiten:  # ディレクトリ関連の設定
+  root_dir: "/work/tamamori/benzaiten_release/"
+  xml_dir: "xml/"  # 学習用MusicXMLの置き場所
+  model_dir: "model/"  # 訓練済みモデルファイルの置き場所
+  feat_dir: "feats/"  # 特徴量ファイル（観測データ + ラベル）の置き場所
+  gen_dir: "gen/"  # ニューラルネットで生成たメロディー付き伴奏データ（midi, wav）の置き場所
+  adlib_dir: "adlib/"  # 伴奏データ、コード進行データ、メロディつき伴奏データの置き場所
+
+feature:  # 特徴量関連の設定
+  total_measures: 240  # 学習用MusicXMLを読み込む際の小節数の上限
+  unit_measures: 4  # 1回の生成で扱う旋律の長さ
+  beat_reso: 4  # 1拍を何個に分割するか（4の場合は16分音符単位）
+  n_beats: 4  # 1小節の拍数（今回は4/4なので常に4）
+  notenum_from: 36  # 扱う音域の下限（この値を含む）
+  notenum_thru: 84  # 扱う音域の上限（この値を含まない）
+  intro_blank_measures: 4  # ブランクおよび伴奏の小節数の合計
+  melody_length: 8  # 生成するメロディの長さ（小節数）
+  key_root: "C"  # 生成するメロディの調のルート（"C" or "A"）
+  key_mode: "major"  # 生成するメロディの調のモード（"major" or "minor"）
+  transpose: 12  # 生成するメロディにおける移調量
+
+preprocess:  # 前処理
+  xml_url: "https://homepages.loria.fr/evincent/omnibook/omnibook_xml.zip"
+  feat_file: "benzaiten_feats.pkl"
+
+model:
+  encoder: # Encoder RNN
+    input_dim: 61
+    emb_dim: 1024
+    hidden_dim: 1024
+    n_layers: 1
+  decoder:  # Decoder RNN
+    output_dim: 49
+    hidden_dim: 1024
+    n_layers: 1
+  vae:  # Variational Autoencoder
+    hidden_dim: 1024
+    latent_dim: 32
+    n_hidden: 0  # number of hidden-to-hidden layers -> スターターキットは0でOK
+    kl_weight: 0.001  # VAEにおけるKL項（正規化項）にかける重み
+
+training:
+  n_epoch: 3000
+  n_batch: 32
+  optim:
+    optimizer:  # 最適化アルゴリズム
+      name: Adam
+      params:  # 最適化アルゴリズムに応じて項目を追加したり減らしたりする
+        lr: 0.0003  # 学習率
+        betas: [0.9, 0.999]
+        eps: 1e-08
+        weight_decay: 0
+    lr_scheduler:  # 学習率調整アルゴリズム
+      name: MultiStepLR
+      params:  # 学習率調整アルゴリズムに応じて項目を追加したり減らしたりする
+        milestones:
+          - 1000
+          - 1500
+        gamma: 0.6
+  use_grad_clip: False  # 勾配クリッピングを使うか否か
+  grad_max_norm: 1.0  # 勾配クリッピングのしきい値
+  use_scheduler: True  # 学習率スケジューリングを使うか否か
+  model_file: "lstm_vae.pt"  # 訓練直後のモデルファイル名
+
+demo:  # デモンストレーション用
+  backing_fid: "1arGB0M7Z_iTf4vi4yE5vkaIyR5vdWhkt"  # 伴奏データのFile ID
+  chord_fid: "1Ksv-EuWQfyJ7kOWzQUQhiv2dzf-mdX45"  # コード進行データのFile ID
+  chkpt_dir: "model/"  # 訓練済みモデルファイルの置き場所
+                       # →訓練直後の置き場所と合成用モデルの置き場所を区別指定可能にする
+  chkpt_file: "lstm_vae.pt"  # 合成に使うモデルファイル
+  sound_font: "/usr/share/sounds/sf2/FluidR3_GM.sf2"
+  backing_file: "sample1_backing.mid"  # 伴奏データファイル
+  chord_file: "sample1_chord.csv"  # コード進行ファイル
+  midi_file: "output.mid" # 出力ファイル (midi)
+  wav_file: "output.wav"  # 出力ファイル (wav)
+  pianoroll_file: "piano_roll.png"  # メロディのピアノロールもどきを画像で保存する
