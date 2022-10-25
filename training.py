@@ -44,11 +44,11 @@ def setup_modules(cfg: DictConfig, device: torch.device):
     lr_scheduler = None
     if cfg.training.use_scheduler:
         lr_scheduler = get_lr_scheduler(cfg, optimizer)
-    training_modules = namedtuple(
+    TrainingModules = namedtuple(
         "TrainingModules",
         ["dataloader", "model", "loss_func", "optimizer", "lr_scheduler"],
     )
-    modules = training_modules(
+    modules = TrainingModules(
         dataloader=dataloader,
         model=model,
         loss_func=loss_func,
