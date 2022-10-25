@@ -24,7 +24,6 @@ benzaiten:  # ディレクトリ関連の設定
   xml_dir: "xml/"  # 学習用MusicXMLの置き場所
   model_dir: "model/"  # 訓練済みモデルファイルの置き場所
   feat_dir: "feats/"  # 特徴量ファイル（観測データ + ラベル）の置き場所
-  gen_dir: "gen/"  # ニューラルネットで生成たメロディー付き伴奏データ（midi, wav）の置き場所
   adlib_dir: "adlib/"  # 伴奏データ、コード進行データ、メロディつき伴奏データの置き場所
 
 feature:  # 特徴量関連の設定
