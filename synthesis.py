@@ -129,7 +129,7 @@ def main(cfg):
     midi = generate_midi(cfg, model, chord_file, device)
     midi.save(midi_file)
 
-    # port midi to wav
+    # export midi to wav
     wav_file = os.path.join(
         cfg.benzaiten.root_dir, cfg.benzaiten.adlib_dir, cfg.demo.wav_file
     )
