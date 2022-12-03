@@ -165,7 +165,9 @@ def make_midi(cfg: DictConfig, notenums, durations):
     transpose = cfg.feature.transpose
     intro_blank_measures = cfg.feature.intro_blank_measures
 
-    backing_file = os.path.join(cfg.benzaiten.adlib_dir, cfg.demo.backing_file)
+    backing_file = os.path.join(
+        cfg.benzaiten.root_dir, cfg.benzaiten.adlib_dir, cfg.demo.backing_file
+    )
     midi = mido.MidiFile(backing_file)
     track = mido.MidiTrack()
     midi.tracks.append(track)
