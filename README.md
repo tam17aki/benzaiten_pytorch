@@ -56,3 +56,14 @@ https://homepages.loria.fr/evincent/omnibook/
 Ken Deguernel, Emmanuel Vincent, and Gerard Assayag.
 "Using Multidimensional Sequences for Improvisation in the OMax Paradigm",
 in Proceedings of the 13th Sound and Music Computing Conference, 2016.
+
+
+## Google Colab
+本PyTorch版のGoogle Colabのノートブックを用意した。
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/10DvaubGl2VkbCbjlWcubFSusRfEJ6Fuc?usp=sharing)
+
+1. Google Driveのマイドライブ直下に「benzaiten」フォルダを作成
+2. 以下のURLからyamlファイルをダウンロードして(config_gdrive.yamlとして保存)、上記benzaitenフォルダに置く https://gist.github.com/tam17aki/3ea977954d9ab7e152bf907c140a22b3
+3. 「ランタイム」→ 「ランタイムのタイプを変更」から、ハードウェアアクセラレータとして「GPU」を選択
+4. 「ランタイム」→「すべてのセルを実行」
